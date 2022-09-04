@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  mysqldb:
+    image: mysql:latest
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+        - ./mysql-init-files:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=simple_chat_task_test
+      - MYSQL_USER=mysqldb
+      - MYSQL_PASSWORD=mysqldb
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  simple_chat_task:
+    build: ./
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    links:
+      - mysqldb
+    ports:
+      - 9090:8080
+    environment:
+      - "SPRING_PROFILES_ACTIVE=test"

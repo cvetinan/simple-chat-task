@@ -51,10 +51,6 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-bootRun {
-    /* Lets you pick Spring Boot profile by system properties, e.g. gradle bootRun -Dspring.profiles.active=dev */
-    systemProperties = System.properties
-}
 def prop = new Properties()
 file("src/main/resources/application.properties")
         .withInputStream { prop.load(it) }
