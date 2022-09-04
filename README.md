@@ -14,12 +14,8 @@ You can build the project using the included Gradle wrapper by running:
 - `./gradlew bootRun` on Linux/macOS
 - `gradlew bootRun` on Windows
 
-## Create a Docker image
-Make sure that the project is built with `./gradlew build` and then run:
-- `./gradlew docker` on Linux/macOS
-- `gradlew docker` on Windows
-
-## Run a Docker image
-To run the docker image on port `8080` use:
-- `./gradlew dockerRun` on Linux/macOS
-- `gradlew dockerRun` on Windows
+## Compose up
+To run the docker image on port `9090` use:
+```
+docker-compose -f docker-compose.yml up
+```

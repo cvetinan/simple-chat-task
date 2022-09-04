@@ -17,7 +17,8 @@ services:
       timeout: 20s
       retries: 10
   simple_chat_task:
-    build: ./
+    image: cnencheva/simple_chat_task
+#    build: ./
     depends_on:
       mysqldb:
         condition: service_healthy
