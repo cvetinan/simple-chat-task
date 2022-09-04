@@ -1,24 +1,26 @@
 package com.qaiware.interview.technicaltask.message.service;
 
-import com.qaiware.interview.technicaltask.message.model.dto.MessageRequestBindingModel;
+import com.qaiware.interview.technicaltask.message.model.dto.MessageDTO;
+import com.qaiware.interview.technicaltask.message.model.dto.TextMessageDTO;
 import com.qaiware.interview.technicaltask.message.model.entity.MessageRequest;
 import com.qaiware.interview.technicaltask.message.model.repository.MessageRequestRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 class MessageRequestServiceTest {
+    private static MessageRequestService messageRequestService;
+    private static MessageRequestRepository messageRequestRepository;
 
-    @InjectMocks
-    private MessageRequestService messageRequestService;
-    @Mock
-    private MessageRequestRepository messageRequestRepository;
+    @BeforeAll
+    static void setUp() {
+        messageRequestRepository = mock(MessageRequestRepository.class);
+        messageRequestService = new MessageRequestService(messageRequestRepository);
+    }
 
     @Test
     void testCreateSuccessful() {
@@ -32,9 +34,7 @@ class MessageRequestServiceTest {
 
         when(messageRequestRepository.save(any(MessageRequest.class))).thenReturn(expectedMessageRequest);
 
-        final MessageRequestBindingModel bindingModel = new MessageRequestBindingModel();
-        bindingModel.setPayload(payload);
-        bindingModel.setType(type);
+        final MessageDTO bindingModel = new TextMessageDTO(type,payload);
 
         final var actualMessageRequest = messageRequestService.create(bindingModel);
         assertThat(actualMessageRequest).usingRecursiveComparison().isEqualTo(expectedMessageRequest);
