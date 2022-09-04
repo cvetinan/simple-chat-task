@@ -4,6 +4,7 @@ import com.qaiware.interview.technicaltask.message.model.dto.EmotionMessageDTO;
 import com.qaiware.interview.technicaltask.message.model.dto.TextMessageDTO;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MessageDTOFactoryTest {
@@ -18,6 +19,12 @@ class MessageDTOFactoryTest {
     void createEmotionMessageDTO() {
         var textMessageDTO = MessageDTOFactory.createMessageDTO("emotion");
         assertTrue(textMessageDTO instanceof EmotionMessageDTO);
+    }
+
+    @Test
+    void createInvalidMessageDTOShouldThrowException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> MessageDTOFactory.createMessageDTO("invalid"));
     }
 
 }
