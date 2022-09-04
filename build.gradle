@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
+    id 'org.liquibase.gradle' version '2.1.0'
 }
 
 group = 'com.qaiware'
@@ -24,7 +25,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.projectlombok:lombok'
-//    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.0'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.15.0'
+    liquibaseRuntime 'info.picocli:picocli:4.6.3'
+    liquibaseRuntime 'mysql:mysql-connector-java:8.0.28'
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -32,4 +37,21 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+def prop = new Properties()
+file("src/main/resources/application.properties")
+        .withInputStream { prop.load(it) }
+
+liquibase {
+    activities {
+        master {
+            changeLogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
+//            url prop.getProperty("spring.datasource.url")
+            url "${System.env.MYSQL_DB_HOST}:${System.env.MYSQL_DB_PORT}/simple_chat_task?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8"
+            driver prop.getProperty("spring.datasource.driver-class-name")
+            username System.env.MYSQL_DB_USERNAME
+            password System.env.MYSQL_DB_PASSWORD
+        }
+    }
 }

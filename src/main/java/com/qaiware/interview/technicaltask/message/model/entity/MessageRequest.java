@@ -24,12 +24,13 @@ public class MessageRequest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private String type;
-    @Column(name = "payload")
+    @Column(name = "payload", nullable = false)
     private String payload;
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     @CreatedDate
     private Date createdAt;
 

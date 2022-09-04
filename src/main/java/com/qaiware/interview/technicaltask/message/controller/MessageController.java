@@ -1,8 +1,9 @@
 package com.qaiware.interview.technicaltask.message.controller;
 
 import com.qaiware.interview.technicaltask.constant.URLMappings;
-import com.qaiware.interview.technicaltask.message.model.dto.MessageRequestBindingModel;
-import com.qaiware.interview.technicaltask.message.model.dto.validationgroup.enumeration.MessageValidationGroup;
+import com.qaiware.interview.technicaltask.message.factory.MessageDTOFactory;
+import com.qaiware.interview.technicaltask.message.model.binding.MessageRequestBindingModel;
+import com.qaiware.interview.technicaltask.message.model.binding.validationgroup.enumeration.MessageValidationGroup;
 import com.qaiware.interview.technicaltask.message.service.MessageRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,9 +41,10 @@ public class MessageController {
             return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
         }
 
-        messageRequestBindingModel.setType(type);
+        var messageDTO = MessageDTOFactory.createMessageDTO(type);
+        messageDTO.setPayload(messageRequestBindingModel.getPayload());
 
-        this.messageRequestService.create(messageRequestBindingModel);
+        this.messageRequestService.create(messageDTO);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

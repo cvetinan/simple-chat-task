@@ -1,9 +1,8 @@
-package com.qaiware.interview.technicaltask.message.model.dto;
+package com.qaiware.interview.technicaltask.message.model.binding;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.qaiware.interview.technicaltask.message.model.dto.validationgroup.EmotionMessageGroup;
-import com.qaiware.interview.technicaltask.message.model.dto.validationgroup.TextMessageGroup;
 import com.qaiware.interview.technicaltask.constant.ValidationConstants;
+import com.qaiware.interview.technicaltask.message.model.binding.validationgroup.EmotionMessageGroup;
+import com.qaiware.interview.technicaltask.message.model.binding.validationgroup.TextMessageGroup;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +23,4 @@ public class MessageRequestBindingModel implements Serializable {
             groups = {EmotionMessageGroup.class})
     @NotEmpty(groups = {TextMessageGroup.class, EmotionMessageGroup.class})
     private String payload;
-
-    @JsonIgnore
-    private String type;
 }
